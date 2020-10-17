@@ -1,3 +1,3 @@
 # Aplicação Web
 
-Esse projeto foi desenvolvido através das tecnologias de javaScrip, Node.js e Handlebars
+Esse projeto foi desenvolvido a partir da trilha do Next Level Week da Rocketseat utilizando javaScrip, Node.js e Handlebars
