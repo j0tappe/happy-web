@@ -1,107 +1,113 @@
-// creat map
-const map = L.map('mapid').setView([-27.222633,-49.6455874], 15)
+localizarUsuario();
 
-// create and add tileLayer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-.addTo(map)
+function localizarUsuario() {
+  if (window.navigator && window.navigator.geolocation) {
+    var geolocation = window.navigator.geolocation;
+    geolocation.getCurrentPosition(sucesso, erro);
+  }
+  function sucesso(posicao) {
+    latitude = posicao.coords.latitude;
+    longitude = posicao.coords.longitude;
+    map = L.map("mapid").setView([latitude, longitude], 15);
 
-// creat icon
-const icon = L.icon({
-    iconUrl:"/images/map-marker.svg",
-    iconSize: [58, 68],
-    iconAnchor: [29, 68]
-})
+    // create and add tileLayer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+      map
+    );
 
+    // creat icon
+    const icon = L.icon({
+      iconUrl: "/images/map-marker.svg",
+      iconSize: [58, 68],
+      iconAnchor: [29, 68],
+    });
 
-let marker;
+    let marker;
 
+    // creat and add marker
+    map.on("click", (event) => {
+      const lat = event.latlng.lat;
+      const lng = event.latlng.lng;
+      // take lat and lng
+      document.querySelector("[name=lat]").value = lat;
+      document.querySelector("[name=lng]").value = lng;
 
-// creat and add marker
-map.on('click', (event) => {
-    const lat = event.latlng.lat;
-    const lng = event.latlng.lng;
-    // take lat and lng
-    document.querySelector('[name=lat]').value = lat;
-    document.querySelector('[name=lng]').value = lng;
+      // remove icon
+      marker && map.removeLayer(marker);
 
-    // remove icon
-    marker && map.removeLayer(marker)
-
-    // add icon layer
-    marker = L.marker([lat, lng], { icon })
-    .addTo(map)
-})
-
-
+      // add icon layer
+      marker = L.marker([lat, lng], { icon }).addTo(map);
+    });
+  }
+  function erro(error) {
+    console.log(error);
+  }
+}
 
 // adicionar o campo de fotos
-function addPhotoField(){
-    // pegar o container de fotos #images
-    const container = document.querySelector('#images')
-    // pegar o container para duplicar .new-image
-    const fieldsContainer = document.querySelectorAll('.new-upload')
-    // realizar o clone da ultima imagem adicionada
-    const newFieldContainer = fieldsContainer[fieldsContainer.length - 1].cloneNode(true)
-    
-    // verificar se o campo esta vazio, se sim, não adicionar ao container de imagens
-    const input = newFieldContainer.children[0]
+function addPhotoField() {
+  // pegar o container de fotos #images
+  const container = document.querySelector("#images");
+  // pegar o container para duplicar .new-image
+  const fieldsContainer = document.querySelectorAll(".new-upload");
+  // realizar o clone da ultima imagem adicionada
+  const newFieldContainer = fieldsContainer[
+    fieldsContainer.length - 1
+  ].cloneNode(true);
 
-    if(input.value == "" ){
-        return
-    }
-    // limpar o campo antes de adicionar ao container de imagens
-    input.value = ""
+  // verificar se o campo esta vazio, se sim, não adicionar ao container de imagens
+  const input = newFieldContainer.children[0];
 
-    // adicionar o clone ao container de #images
-    container.appendChild(newFieldContainer)
+  if (input.value == "") {
+    return;
+  }
+  // limpar o campo antes de adicionar ao container de imagens
+  input.value = "";
+
+  // adicionar o clone ao container de #images
+  container.appendChild(newFieldContainer);
 }
 
 function deleteField(event) {
-    const span = event.currentTarget
+  const span = event.currentTarget;
 
-    const fieldsContainer = document.querySelectorAll('.new-upload')
+  const fieldsContainer = document.querySelectorAll(".new-upload");
 
-    if(fieldsContainer.length <= 1) {
-        //limpar o valor do campo
-        span.parentNode.children[0].value = ""
-        return
-    }
+  if (fieldsContainer.length <= 1) {
+    //limpar o valor do campo
+    span.parentNode.children[0].value = "";
+    return;
+  }
 
-     // deletar o campo 
-     span.parentNode.remove();
-
+  // deletar o campo
+  span.parentNode.remove();
 }
 
 // selecionar sim ou não
 function toggleSelect(event) {
+  // retirar a class .active (dos botões)
+  document.querySelectorAll(".button-select button").forEach(function (button) {
+    button.classList.remove("active");
+  });
 
-    // retirar a class .active (dos botões)
-   document.querySelectorAll('.button-select button')
-   .forEach(function(button) {
-        button.classList.remove('active')
-   })
+  // colocar a class .active nesse botão clicado
+  const button = event.currentTarget;
+  button.classList.add("active");
 
-    // colocar a class .active nesse botão clicado
-   const button = event.currentTarget
-   button.classList.add('active')
+  // atualizar o meu input hidden com o valor selecionados
+  const input = document.querySelector('[name="open_on_weekends"]');
 
-    // atualizar o meu input hidden com o valor selecionados
-   const input = document.querySelector('[name="open_on_weekends"]')
-   
-   input.value = button.dataset.value
+  input.value = button.dataset.value;
 }
 
 function validate(event) {
+  // validar se lat e lng estão preenchidos
+  // if pegar o campo e verificar se no value dele esta vazio, se estiver você faz: event prevent defaut
+  // pegar a constante e identificar se é true ou false
 
-    // validar se lat e lng estão preenchidos
-    // if pegar o campo e verificar se no value dele esta vazio, se estiver você faz: event prevent defaut
-    // pegar a constante e identificar se é true ou false
-    
-    const needsLatAndLng = false;
-    if (needsLatAndLng) {
-        event.preventDefault()
-        alert('Selecione um ponto no mapa')
-   }
-   
-    
+  const needsLatAndLng = false;
+  if (needsLatAndLng) {
+    event.preventDefault();
+    alert("Selecione um ponto no mapa");
+  }
 }
