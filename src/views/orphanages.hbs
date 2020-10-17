@@ -29,7 +29,11 @@
   <div id="page-orphanages">
     <aside class="animate-right">
       <header>
-        <img src="/images/map-marker.svg" alt="Happy" />
+        <footer>
+          <a href="/">
+            <img src="/images/map-marker.svg" alt="Happy" />
+          </a>
+        </footer>
 
         <h2>Escolha um orfanato no mapa</h2>
 
@@ -37,26 +41,22 @@
       </header>
 
       <footer>
-        <strong>Rio do Sul</strong>
-        <p>Santa Catarina</p>
+        <strong>Maceió</strong>
+        <p>Alagoas</p>
       </footer>
     </aside>
 
     <div id="mapid" class="animate-appear"></div>
 
 
-  <div class="orphanages">
+    <div class="orphanages">
       {{#each orphanages}}
-          <span hidden
-              data-id="{{this.id}}"
-              data-name="{{this.name}}"
-              data-lat="{{this.lat}}"
-              data-lng="{{this.lng}}"
-          ></span>
+      <span hidden data-id="{{this.id}}" data-name="{{this.name}}" data-lat="{{this.lat}}"
+        data-lng="{{this.lng}}"></span>
 
       {{/each}}
-  </div>
-  
+    </div>
+
 
 
     <a href="/create-orphanage" class="create-orphanage" title="Cadastre um orfanato">
